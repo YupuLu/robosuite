@@ -64,9 +64,9 @@ class SingleArm(Manipulator):
         initialization_noise=None,
         mount_type="default",
         gripper_type="default",
-        control_freq=20
+        control_freq=20,
+        **kwargs
     ):
-
         self.controller = None
         self.controller_config = copy.deepcopy(controller_config)
         self.gripper_type = gripper_type
@@ -95,6 +95,7 @@ class SingleArm(Manipulator):
             initialization_noise=initialization_noise,
             mount_type=mount_type,
             control_freq=control_freq,
+            **kwargs
         )
 
     def _load_controller(self):

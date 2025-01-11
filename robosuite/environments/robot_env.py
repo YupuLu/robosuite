@@ -126,6 +126,8 @@ class RobotEnv(MujocoEnv):
         camera_widths=256,
         camera_depths=False,
         robot_configs=None,
+        initial_qpos=None,
+        **kwargs
     ):
         # First, verify that correct number of robots are being inputted
         self.env_configuration = env_configuration
@@ -143,6 +145,9 @@ class RobotEnv(MujocoEnv):
 
         # Controller
         controller_configs = self._input2list(controller_configs, self.num_robots)
+
+        # Initial joint positions
+        initial_qpos = self._input2list(initial_qpos, self.num_robots)
 
         # Initialization Noise
         initialization_noise = self._input2list(initialization_noise, self.num_robots)
@@ -175,7 +180,8 @@ class RobotEnv(MujocoEnv):
                     "controller_config": controller_configs[idx],
                     "mount_type": mount_types[idx],
                     "initialization_noise": initialization_noise[idx],
-                    "control_freq": control_freq
+                    "control_freq": control_freq,
+                    "initial_qpos": initial_qpos[idx],
                 },
                 **robot_config,
             )
@@ -194,6 +200,7 @@ class RobotEnv(MujocoEnv):
             horizon=horizon,
             ignore_done=ignore_done,
             hard_reset=hard_reset,
+            **kwargs
         )
 
     def visualize(self, vis_settings):

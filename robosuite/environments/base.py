@@ -105,7 +105,8 @@ class MujocoEnv(metaclass=EnvMeta):
         control_freq=20,
         horizon=1000,
         ignore_done=False,
-        hard_reset=True
+        hard_reset=True,
+        **kwargs
     ):
         # First, verify that both the on- and off-screen renderers are not being used simultaneously
         if has_renderer is True and has_offscreen_renderer is True:
@@ -216,7 +217,7 @@ class MujocoEnv(metaclass=EnvMeta):
         self.mjpy_model = load_model_from_xml(xml_string) if xml_string else self.model.get_model(mode="mujoco_py")
 
         # Create the simulation instance and run a single step to make sure changes have propagated through sim state
-        self.sim = MjSim(self.mjpy_model)
+        self.sim: MjSim = MjSim(self.mjpy_model)
         self.sim.forward()
 
         # Setup sim time based on control frequency

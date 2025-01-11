@@ -51,6 +51,7 @@ class Robot(object):
         initialization_noise=None,
         mount_type="default",
         control_freq=20,
+        **kwargs
     ):
         # Set relevant attributes
         self.sim = None                                     # MjSim this robot is tied to
@@ -125,16 +126,17 @@ class Robot(object):
         Raises:
             ValueError: [Invalid noise type]
         """
+        rand_len = max(len(self.init_qpos), 7)
         init_qpos = np.array(self.init_qpos)
         if not deterministic:
             # Determine noise
             if self.initialization_noise["type"] == "gaussian":
-                noise = np.random.randn(len(self.init_qpos)) * self.initialization_noise["magnitude"]
+                noise = np.random.randn(rand_len) * self.initialization_noise["magnitude"]
             elif self.initialization_noise["type"] == "uniform":
-                noise = np.random.uniform(-1.0, 1.0, len(self.init_qpos)) * self.initialization_noise["magnitude"]
+                noise = np.random.uniform(-1.0, 1.0, rand_len) * self.initialization_noise["magnitude"]
             else:
                 raise ValueError("Error: Invalid noise type specified. Options are 'gaussian' or 'uniform'.")
-            init_qpos += noise
+            init_qpos += noise[:len(self.init_qpos)]
 
         # Set initial position in sim
         self.sim.data.qpos[self._ref_joint_pos_indexes] = init_qpos

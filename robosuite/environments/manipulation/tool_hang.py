@@ -146,6 +146,7 @@ class ToolHang(SingleArmEnv):
         camera_heights=256,
         camera_widths=256,
         camera_depths=False,
+        **kwargs
     ):
         # settings for table top
         self.table_full_size = table_full_size
@@ -181,6 +182,7 @@ class ToolHang(SingleArmEnv):
             camera_heights=camera_heights,
             camera_widths=camera_widths,
             camera_depths=camera_depths,
+            **kwargs
         )
 
     def reward(self, action=None):

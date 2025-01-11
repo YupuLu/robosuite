@@ -127,6 +127,8 @@ class ManipulationEnv(RobotEnv):
         camera_heights=256,
         camera_widths=256,
         camera_depths=False,
+        initial_qpos=None,
+        **kwargs
     ):
         # Robot info
         robots = list(robots) if type(robots) is list or type(robots) is tuple else [robots]
@@ -166,6 +168,8 @@ class ManipulationEnv(RobotEnv):
             camera_widths=camera_widths,
             camera_depths=camera_depths,
             robot_configs=robot_configs,
+            initial_qpos=initial_qpos,
+            **kwargs
         )
 
     @property
