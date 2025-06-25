@@ -11,8 +11,10 @@ class Panda(ManipulatorModel):
         idn (int or str): Number or some other unique identification string for this robot instance
     """
 
-    def __init__(self, idn=0):
-        super().__init__(xml_path_completion("robots/panda/robot.xml"), idn=idn)
+    def __init__(self, idn=0, xml_path=None):
+        if xml_path is None:
+            xml_path = "robots/panda/robot.xml"
+        super().__init__(xml_path_completion(xml_path), idn=idn)
 
         # Set joint damping
         self.set_joint_attribute(attrib="damping", values=np.array((0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.01)))

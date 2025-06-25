@@ -90,11 +90,11 @@ class Robot(object):
         """
         raise NotImplementedError
 
-    def load_model(self):
+    def load_model(self, **kwargs):
         """
         Loads robot and optionally add grippers.
         """
-        self.robot_model = create_robot(self.name, idn=self.idn)
+        self.robot_model = create_robot(self.name, idn=self.idn, **kwargs)
 
         # Add mount if specified
         if self.mount_type == "default":
@@ -115,7 +115,7 @@ class Robot(object):
         """
         self.sim = sim
 
-    def reset(self, deterministic=False):
+    def reset(self, deterministic=False, qpos=None):
         """
         Sets initial pose of arm and grippers. Overrides robot joint configuration if we're using a
         deterministic reset (e.g.: hard reset from xml file)
@@ -139,7 +139,7 @@ class Robot(object):
             init_qpos += noise[:len(self.init_qpos)]
 
         # Set initial position in sim
-        self.sim.data.qpos[self._ref_joint_pos_indexes] = init_qpos
+        self.sim.data.qpos[self._ref_joint_pos_indexes] = init_qpos if qpos is None else qpos
 
         # Load controllers
         self._load_controller()

@@ -72,6 +72,7 @@
                                         <geom pos="0 0 -0.0005" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.4 0.4 0.4 1" mesh="link_7_vis" name="link_7_visual" />
                                         <geom pos="0 0 -0.0005" type="mesh" contype="0" rgba="0.4 0.4 0.4 1" mesh="link_7" name="link_7_collision" />
                                         <body name="right_hand" pos="0 0 0.044" >
+                                        <!-- <body name="right_hand" pos="0 0 0.045" > -->
                                             <!-- This sites were added for visualization. They are all standardized between models-->
                                             <!-- Position mimics the gripper attachment point (right_hand) -->
                                             <!--  Y-axis should be perpendicular to grasping motion, and Z-axis should point out of the robot eef -->

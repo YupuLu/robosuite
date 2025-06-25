@@ -63,7 +63,8 @@
                                         <joint name="Actuator7" pos="0 0 0" axis="0 0 1" damping="0.01" />
                                         <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" name="b_visual" mesh="bracelet_with_vision_link" />
                                         <geom type="mesh" conaffinity="0" rgba="0.75294 0.75294 0.75294 1" mesh="bracelet_with_vision_link" name="b_collision"/>
-                                        <body name="right_hand" pos="0 0 -0.065" quat="0 0.707105 -0.707108 0">
+                                        <!-- <body name="right_hand" pos="0 0 -0.065" quat="0 0.707105 -0.707108 0"> -->
+                                        <body name="right_hand" pos="0 0 0">
                                             <!-- This sites were added for visualization. They are all standardized between models-->
                                             <!-- Position mimics the gripper attachment point (right_hand) -->
                                             <!--  Y-axis should be perpendicular to grasping motion, and Z-axis should point out of the robot eef -->

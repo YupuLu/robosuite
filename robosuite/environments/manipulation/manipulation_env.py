@@ -128,6 +128,7 @@ class ManipulationEnv(RobotEnv):
         camera_widths=256,
         camera_depths=False,
         initial_qpos=None,
+        robot_configs=None,
         **kwargs
     ):
         # Robot info
@@ -138,11 +139,16 @@ class ManipulationEnv(RobotEnv):
         gripper_types = self._input2list(gripper_types, num_robots)
 
         # Robot configurations to pass to super call
+        if robot_configs is None:
+            robot_configs = [{} for _ in range(num_robots)]
         robot_configs = [
-            {
-                "gripper_type": gripper_types[idx],
-            }
-            for idx in range(num_robots)
+            dict(
+                **{
+                    "gripper_type": gripper_types[idx],
+                },
+                **robot_config,
+            )
+            for idx, robot_config in enumerate(robot_configs)
         ]
 
         # Run superclass init

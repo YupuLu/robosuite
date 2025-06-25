@@ -65,12 +65,14 @@ class SingleArm(Manipulator):
         mount_type="default",
         gripper_type="default",
         control_freq=20,
+        xml_path=None,
         **kwargs
     ):
         self.controller = None
         self.controller_config = copy.deepcopy(controller_config)
         self.gripper_type = gripper_type
         self.has_gripper = self.gripper_type is not None
+        self.xml_path = xml_path
 
         self.gripper = None                                 # Gripper class
         self.gripper_joints = None                          # xml joint names for gripper
@@ -135,12 +137,14 @@ class SingleArm(Manipulator):
         # Instantiate the relevant controller
         self.controller = controller_factory(self.controller_config["type"], self.controller_config)
 
-    def load_model(self):
+    def load_model(self, **kwargs):
         """
         Loads robot and optionally add grippers.
         """
         # First, run the superclass method to load the relevant model
-        super().load_model()
+        if self.xml_path is not None:
+            kwargs["xml_path"] = self.xml_path 
+        super().load_model(**kwargs)
 
         # Verify that the loaded model is of the correct type for this robot
         if self.robot_model.arm_type != "single":
