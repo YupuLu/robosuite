@@ -37,14 +37,21 @@ if __name__ == "__main__":
         default=3,
         help="Time to simulate after rendering the environment. Default is 3 seconds."
     )
+    parser.add_argument(
+        "-cn",
+        "--camera_name",
+        type=str,
+        default="frontview",
+        help="Camera name to use for rendering. Default is 'frontview'. Options: 'frontview', 'birdview', 'sideview', 'agentview', 'robot0_robotview', 'robot0_eye_in_hand'."
+    )
     args = parser.parse_args()
 
     gripper = list(ALL_GRIPPERS)[args.gripper_id]
     # Notify user which gripper we're currently using
     print("Using gripper {}...".format(gripper))
 
-    CAMERA_NAME = 'frontview'
-    
+    CAMERA_NAME = args.camera_name  # Use the camera name provided by the user
+        
     # create environment with selected grippers
     env: RobotEnv = suite.make(
         "EmptySingle",
@@ -75,24 +82,35 @@ if __name__ == "__main__":
         env.sim.reset()
         env.sim.set_state_from_flattened(initial_mjstate)
         env.sim.forward()
-        
-        camera_pos = np.array([1.8945960430077307, 0.019995513940986764, 0.3429729188444908])
-        camera_quat = np.array([0.5, 0.50, 0.5, 0.5])
+
+        # Set camera position and orientation
+        cam_body_id = env.sim.model.body_name2id("cameramover")
+        if CAMERA_NAME == 'frontview':
+            camera_pos = np.array([1.9, 0.02, 0.34])
+            camera_quat = np.array([0.5, 0.50, 0.5, 0.5])
+            env.sim.model.body_pos[cam_body_id] = camera_pos
+            env.sim.model.body_quat[cam_body_id] = camera_quat
+        elif CAMERA_NAME == 'sideview':
+            env.sim.model.body_pos[cam_body_id][0] += 0.4
+            env.sim.model.body_pos[cam_body_id][2] = 0.6
+        elif CAMERA_NAME == 'birdview':
+            env.sim.model.body_pos[cam_body_id][0] += 0.4
+        elif CAMERA_NAME == 'agentview':
+            env.sim.model.body_pos[cam_body_id][0] += 0.9
+        env.sim.forward()
+
+        # Set camera
         camera_id = env.sim.model.camera_name2id(CAMERA_NAME)
         env.viewer.set_camera(camera_id=camera_id)
-        cam_body_id = env.sim.model.body_name2id("cameramover")
-        env.sim.model.body_pos[cam_body_id] = camera_pos
-        env.sim.model.body_quat[cam_body_id] = camera_quat
-        env.sim.forward()
         env.render()
 
-        # # Get action limits
+        # Get action limits
         low, high = env.action_spec
         # action = np.random.uniform(low, high)
 
         # Run random policy
         count = int(args.sim_time / 0.01)  # 100Hz
-        for t in range(100):
+        for t in range(count):
             # env.render()
             action = np.zeros(*env.action_spec[0].shape) # Zero action
             observation, reward, done, info = env.step(action)
